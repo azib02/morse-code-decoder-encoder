@@ -1,0 +1,119 @@
+<html>
+<head>
+<title>Morse Code</title>
+<script>
+
+	const mcode = {
+      'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+      'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
+      'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
+      'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+      'Y': '-.--', 'Z': '--..', ' ': ' ', '0': '-----',
+      '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....',
+      '6': '-....', '7': '--...', '8': '---..', '9': '----.',
+      '&': '.-...', "'": '.----.', '@': '.--.-.', ')': '-.--.-', '(': '-.--.',
+      ':': '---...', ',': '--..--', '=': '-...-', '!': '-.-.--', '.': '.-.-.-',
+      '-': '-....-', '+': '.-.-.', '"': '.-..-.', '?': '..--..', '/': '-..-.'
+    }
+
+function encdec(){
+	let str_input = document.getElementById("input").value;
+	let operation = document.getElementById("operation").value;
+	// if the op is encode call the function encode
+	// feed it the str_input and return the answer where output is
+	if (operation === "enc"){
+	const encodedMorseCode = encodeMorse(str_input);
+	document.getElementById("output").value = encodedMorseCode;
+	document.getElementById("output").innerHTML = encodedMorseCode;
+	}
+	// same process but for decode
+	else{
+	const decodedText = decodeMorse(str_input);
+	document.getElementById("output").value = decodedText;
+	document.getElementById("output").innerHTML = decodedText;
+	}
+}
+
+function encodeMorse(text){
+	let encodedText = '';
+	// iterate for each character, letter in text
+	for (const char of text){
+	// get the morsecode for current character
+	const morseCode = mcode[char.toUpperCase()];
+	// if there's no morse code, alert window open and process ends
+	if (!morseCode && char !== ' '){
+	window.alert("Invalid input");
+	process.exit();
+	}
+	// if the morsecode exist add it to creted string encodedtext plus a space
+	else if (morseCode){
+	encodedText += morseCode + ' ';
+	}
+	}
+	// trim to delete any additional spacings and return result
+	return encodedText.trim()
+}
+
+function decodeMorse(morseCode){
+	let decodedText = '';
+	// as in the morsecode provided words
+	// are divided by two spaces, we split the data
+	// looking for two spaces, in order to find the words
+	const words = morseCode.split('  ');
+	// iterate overe each word
+	for (const word of words){
+	// as each letter in the word is divided by single space
+	// use split again, this time detecting one space
+	// in order to find the letters
+	const letters = word.split(' ');
+	// iterate for each letter
+	for (const letter of letters){
+	// iterate in the mcode 
+	for (const key in mcode){
+	// if a match is found we add the equivelent alphabetic letter
+	// to the decodedtext string created earlier
+	if (mcode[key] === letter) {
+	decodedText += key.toLowerCase();
+	break;
+	}
+	}
+	}
+	// nested in the for iterating over the words
+	// therefore will add a space after each word
+	decodedText += ' ';
+	}
+	// trim to delete any additional spacings and return result
+	return decodedText.trim();
+	
+}
+
+
+</script>
+</head>
+<body>
+<H1>Morse code encoder/decoder</H1>
+<h3>@author: azib </h3>
+<div>
+<form>
+<p> Enter a string</p>
+<p> <textarea id="input" rows='5' cols='50'></textarea> </p>
+<p>
+<div id="optionloc" style="position:absolute; top:190px; left:240px;">
+<select id="operation">
+<option value="enc">Encode</option>
+<option value="dec">Decode</option>
+</select>
+</div>
+<div id="buttonloc" style="position:absolute; top:190px; left:320px;">
+<button type="button" id="submit" onclick=encdec()>Submit</button>
+</div>
+</p>
+
+<div>
+<p>Encoded/decoded Morse code: </p>
+<textarea id="output" rows='5' cols='50' readonly></textarea>
+</div>
+</form>
+</div>
+</body>
+</html>
